@@ -1,9 +1,7 @@
 // Creating the map object
 
 
-//   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-// }).addTo(myMap);
+
 
 
 var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -55,5 +53,25 @@ d3.json(queryUrl).then(function (earthquakeData) {
                 "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
         }
     }).addTo(myMap)
-});
 
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        ranges = [-10, 30, 50, 70, 90],
+        labels = [];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < ranges.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getcolor(ranges[i] + 1) + '"></i> ' +
+            ranges[i] + (ranges[i + 1] ? '&ndash;' + ranges[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(myMap);
+
+}); 
